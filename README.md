@@ -76,6 +76,18 @@ To run the PostgreSQL container:
 ```sh
 docker-compose up -d
 ```
+Verify PostgreSQL running 
+```
+psql -U user -d postgress 
+
+SELECT
+    application_name,
+    client_addr,
+    state,
+    now() - pg_last_xact_replay_timestamp() AS replication_lag_time
+FROM
+    pg_stat_replication;
+```
 To access the running PostgreSQL container:
 ```sh
 docker exec -it POSTGRES_CONTAINER_ID /bin/bash
