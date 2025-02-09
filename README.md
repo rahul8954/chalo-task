@@ -98,4 +98,7 @@ To remove the infrastructure:
 ```sh
 terraform destroy
 ```
+## Screenshot for PostgresSQL master node
+<img width="685" alt="Screenshot 2025-02-10 at 3 10 37 AM" src="https://github.com/user-attachments/assets/76e8c081-fe84-4336-bc91-c2b3842c2dbd" />
+
 
