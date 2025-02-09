@@ -1,4 +1,4 @@
-# PostgreSQL Infrastructure Automation
+# PostgreSQL Infrastructure Automation 
 
 This repository automates the deployment and configuration of a PostgreSQL cluster on AWS using Terraform and Ansible. It enables seamless scaling and replication management.
 
@@ -23,6 +23,16 @@ This project automates the deployment of PostgreSQL infrastructure on AWS, utili
 }
 ```
 
+#### Example cURL Command:
+```sh
+curl -X POST http://localhost:5000/generate \
+-H "Content-Type: application/json" \
+-d '{
+  "instance_type": "t3.large",
+  "num_replicas": 2
+}'
+```
+
 ### 2. `/apply`
 **Method:** `POST`
 **Description:** Applies the generated Terraform configurations, provisioning the infrastructure on AWS.
@@ -30,9 +40,14 @@ This project automates the deployment of PostgreSQL infrastructure on AWS, utili
 #### Parameters:
 {}
 
+#### Example cURL Command:
+```sh
+curl -X POST http://localhost:5000/apply
+```
+
 ### 3. `/apply_ansible_configuration`
 **Method:** `POST`
-**Description:**
+**Description:** 
 Generates the Ansible inventory file and playbook based on the Terraform outputs. It also updates `docker-compose.yml` and `postgresql.conf` to configure PostgreSQL containers with user-defined settings.
 
 - Ansible inventory file is generated using the Terraform output (primary and replica instance IP addresses).
@@ -50,6 +65,23 @@ Generates the Ansible inventory file and playbook based on the Terraform outputs
   "max_connection": "200",
   "shared_buffers": "256MB"
 }
+```
+
+#### Example cURL Command:
+```sh
+curl -X POST http://localhost:5000/apply_ansible_configuration \
+-H "Content-Type: application/json" \
+-d '{
+  "image_tag": "latest",
+  "max_connection": "200",
+  "shared_buffers": "256MB"
+}'
+```
+
+## Running Ansible Playbook
+To apply the Ansible configuration manually, run:
+```sh
+ansible-playbook -i inventory.txt playbook.yml --ssh-extra-args="-o StrictHostKeyChecking=no"
 ```
 
 ## Docker Compose Configuration
@@ -76,15 +108,18 @@ To run the PostgreSQL container:
 ```sh
 docker-compose up -d
 ```
-
 To access the running PostgreSQL container:
 ```sh
 docker exec -it POSTGRES_CONTAINER_ID /bin/bash
 ```
-Verify PostgreSQL running 
-```
-psql -U user -d postgress 
 
+## Verifying Replication Status
+To connect to the PostgreSQL database and check replication status, use:
+```sh
+psql -U user -d postgres
+```
+Then, run the following query to check replication lag:
+```sql
 SELECT
     application_name,
     client_addr,
@@ -93,11 +128,14 @@ SELECT
 FROM
     pg_stat_replication;
 ```
+
 ## Cleanup
 To remove the infrastructure:
 ```sh
 terraform destroy
 ```
+
+
 ## Screenshot for PostgresSQL master node
 <img width="685" alt="Screenshot 2025-02-10 at 3 10 37 AM" src="https://github.com/user-attachments/assets/76e8c081-fe84-4336-bc91-c2b3842c2dbd" />
 
