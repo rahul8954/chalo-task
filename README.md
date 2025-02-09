@@ -76,6 +76,11 @@ To run the PostgreSQL container:
 ```sh
 docker-compose up -d
 ```
+
+To access the running PostgreSQL container:
+```sh
+docker exec -it POSTGRES_CONTAINER_ID /bin/bash
+```
 Verify PostgreSQL running 
 ```
 psql -U user -d postgress 
@@ -88,11 +93,6 @@ SELECT
 FROM
     pg_stat_replication;
 ```
-To access the running PostgreSQL container:
-```sh
-docker exec -it POSTGRES_CONTAINER_ID /bin/bash
-```
-
 ## Cleanup
 To remove the infrastructure:
 ```sh
