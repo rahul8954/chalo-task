@@ -7,7 +7,7 @@ This project automates the deployment of PostgreSQL infrastructure on AWS, utili
 
 ## API Documentation
 
-### 1. `/generate`
+### 1. `/generate_terraform_configuration`
 **Method:** `POST`  
 **Description:** Generates Terraform configuration files for the PostgreSQL infrastructure. It takes user input for the instance type and the number of replica instances, writing the generated configurations to the `terraform_configs` directory.
 
@@ -25,7 +25,7 @@ This project automates the deployment of PostgreSQL infrastructure on AWS, utili
 
 #### Example cURL Command:
 ```sh
-curl -X POST http://localhost:5000/generate \
+curl -X POST http://localhost:5000/generate_terraform_configuration \
 -H "Content-Type: application/json" \
 -d '{
   "instance_type": "t3.large",
@@ -33,7 +33,7 @@ curl -X POST http://localhost:5000/generate \
 }'
 ```
 
-### 2. `/apply`
+### 2. `/apply_terraform_configuration`
 **Method:** `POST`
 **Description:** Applies the generated Terraform configurations, provisioning the infrastructure on AWS.
 
@@ -42,10 +42,10 @@ curl -X POST http://localhost:5000/generate \
 
 #### Example cURL Command:
 ```sh
-curl -X POST http://localhost:5000/apply
+curl -X POST http://localhost:5000/apply_terraform_configuration
 ```
 
-### 3. `/apply_ansible_configuration`
+### 3. `/apply_ansible_setup`
 **Method:** `POST`
 **Description:** 
 Generates the Ansible inventory file and playbook based on the Terraform outputs. It also updates `docker-compose.yml` and `postgresql.conf` to configure PostgreSQL containers with user-defined settings.
@@ -69,7 +69,7 @@ Generates the Ansible inventory file and playbook based on the Terraform outputs
 
 #### Example cURL Command:
 ```sh
-curl -X POST http://localhost:5000/apply_ansible_configuration \
+curl -X POST http://localhost:5000/apply_ansible_setup \
 -H "Content-Type: application/json" \
 -d '{
   "image_tag": "latest",
